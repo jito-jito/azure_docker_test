@@ -1,6 +1,9 @@
 trigger:
   - master
 
+# PASO 1: Definir el formato aquí (Azure sí procesa la fecha aquí correctamente)
+name: $(Date:yyyyMMdd).$(Rev:r)
+
 variables:
   - group: ACR_SUM2_SECRETOS
   - name: ACR_NAME
@@ -11,8 +14,10 @@ variables:
     value: 'SC_ACR_GRUPO009_SUM2'
   - name: ENVIRONMENT_NAME
     value: 'finanzasAlCorreo-PROD'
+  # PASO 2: Usar el BuildNumber que ya tiene la fecha
   - name: DOCKER_TAG
-    value: '$(Build.BuildId)-$(Date:yyyyMMdd)$(Date:HHmm)'
+    value: '$(Build.BuildNumber)'
+
 stages:
   - stage: Build
     jobs:

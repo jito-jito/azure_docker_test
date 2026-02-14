@@ -5,7 +5,7 @@ trigger:
 
 variables:
   # Vinculamos el grupo que creamos en la Library
-  - group: acr-secretos
+  - group: ACR_SUM2_SECRETOS
   # Definimos el resto de variables
   - name: VM_IP_PUBLICA
     value: '48.211.160.12'
@@ -52,3 +52,4 @@ jobs:
                 echo "Despliegue finalizado con éxito."
                 echo "Accede en: http://$(VM_IP_PUBLICA)/"
               displayName: 'Resumen de Despliegue'
+

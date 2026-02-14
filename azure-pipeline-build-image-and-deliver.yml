@@ -12,7 +12,7 @@ variables:
   - name: ENVIRONMENT_NAME
     value: 'finanzasAlCorreo-PROD'
   - name: DOCKER_TAG
-    value: '$(Build.Id)-$(Date:yyyyMMdd)$(Date:HHmm)'
+    value: '$(Build.BuildId)-$(Date:yyyyMMdd)$(Date:HHmm)'
 stages:
   - stage: Build
     jobs:

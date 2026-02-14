@@ -11,7 +11,8 @@ variables:
     value: 'SC_ACR_GRUPO009_SUM2'
   - name: ENVIRONMENT_NAME
     value: 'finanzasAlCorreo-PROD'
-
+  - name: DOCKER_TAG
+    value: '$(Build.Id)-$(Date:yyyyMMdd)$(Date:HHmm)'
 stages:
   - stage: Build
     jobs:
@@ -25,7 +26,9 @@ stages:
               containerRegistry: '$(DOCKER_CONN)'
               repository: '$(IMAGE_NAME)'
               dockerfile: '**/Dockerfile'
-              tags: 'latest'
+              tags: |
+                latest
+                $(DOCKER_TAG)
 
   - stage: Deploy
     dependsOn: Build

@@ -1,0 +1,47 @@
+trigger:
+  - master
+
+variables:
+  - group: ACR_SUM2_SECRETOS
+  - name: ACR_NAME
+    value: 'ACRDEVOPS001AGRUPO09SUM2'
+  - name: IMAGE_NAME
+    value: 'myapp-nginx-s4'
+  - name: DOCKER_CONN
+    value: 'SC_ACR_GRUPO009_SUM2'
+  - name: ENVIRONMENT_NAME
+    value: 'finanzasAlCorreo-PROD'
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildAndPush
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: Docker@2
+            inputs:
+              command: 'buildAndPush'
+              containerRegistry: '$(DOCKER_CONN)'
+              repository: '$(IMAGE_NAME)'
+              dockerfile: '**/Dockerfile'
+              tags: 'latest'
+
+  - stage: Deploy
+    dependsOn: Build
+    jobs:
+      - deployment: DeployToVM
+        environment: 
+          name: '$(ENVIRONMENT_NAME)'
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: |
+                    echo $(ACR_PASSWORD) | sudo docker login $(ACR_NAME).azurecr.io -u $(ACR_NAME) --password-stdin
+                    sudo docker pull $(ACR_NAME).azurecr.io/$(IMAGE_NAME):latest
+                    sudo docker stop nginx_container || true
+                    sudo docker rm nginx_container || true
+                    sudo docker run -d -p 80:80 --name nginx_container $(ACR_NAME).azurecr.io/$(IMAGE_NAME):latest
+                  displayName: 'Actualizar Contenedor en VM'

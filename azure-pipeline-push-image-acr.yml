@@ -5,9 +5,9 @@ trigger:
 
 variables:
   # Variables de entorno
-  ACR_NAME: 'myappdevops' # Colocar el nombre de tu ACR
+  ACR_NAME: 'ACRDEVOPS001AGRUPO09SUM2' # Colocar el nombre de tu ACR
   IMAGE_NAME: 'myapp-nginx-s4' # Colocar el Nombre de Imagen
-  SERVICE_CONNECTION_NAME: 'myapps-devops-s4' # Colocar nombre del Service Connection ubicado en Docker Registry-- Azure Container Registry
+  SERVICE_CONNECTION_NAME: 'SC_ACR_GRUPO009_SUM2' # Colocar nombre del Service Connection ubicado en Docker Registry-- Azure Container Registry
 
 jobs:
   - job: BuildAndPush
@@ -18,8 +18,10 @@ jobs:
         inputs:
           command: 'buildAndPush'
           containerRegistry: '$(SERVICE_CONNECTION_NAME)'
-          repository: '$(ACR_NAME).azurecr.io/$(IMAGE_NAME)'
+          repository: '$(IMAGE_NAME)'
           dockerfile: '**/Dockerfile'
           tags: |
             latest
         displayName: 'Build and Push Docker Image'
+
+

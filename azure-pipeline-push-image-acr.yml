@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - main
+      - master
 
 variables:
   # Variables de entorno
@@ -23,5 +23,6 @@ jobs:
           tags: |
             latest
         displayName: 'Build and Push Docker Image'
+
 
 
